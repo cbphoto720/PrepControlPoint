@@ -7,6 +7,8 @@ GPSpoints=importGPSpoints("20241023_SeacliffcamCGPIG81_2024-10-23-12-09-00");
 
 %% Clean up data import based on comments in file:
 % Be careful that index numbers change once you start deleting points!
+% This code uses comments to group out sets of GCPs.  Add the comments in
+% the field or you can manually add set# in the second column of the data.
 
 GPSpoints(1,:)=[];
 GPSpoints(8,:)=[]; %same as point 9
