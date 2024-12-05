@@ -56,3 +56,7 @@ scale=0.000002; % offset text from point
 offsetx=-0.0000004+dir(:,1)*scale; % offset text on the point
 offsety=-0.00000008+dir(:,2)*scale; % offset text on the point
 text(GPSpoints.Latitude+offsety,GPSpoints.Longitude+offsetx,c)
+
+%% Scratch paper
+
+generateLeviUTC(10,5, '20241023', 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data');
