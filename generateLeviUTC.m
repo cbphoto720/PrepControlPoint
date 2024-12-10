@@ -1,9 +1,12 @@
-function generateLeviUTC(NUM_IMGsets,PointsInSet, date, path)
-%generateLeviUTC Create image set UTC file for us in PickControlPoint
+function imgtime = generateLeviUTC(NUM_IMGsets,PointsInSet, date, path)
+%generateLeviUTC: Create image set UTC file for us in PickControlPoint
 %software
+% Inputs:
 %   NUM_IMGsets =   [#] How many different images are you using
 %   MaxNUMPointsinSet = [#] What is the maximum # of points per img  
 %   date    =   [yyyyMMdd](string) date of img capture
+% Outputs:
+%   
 
 %% Input Parsing
 try

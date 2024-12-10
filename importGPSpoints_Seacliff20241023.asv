@@ -67,5 +67,5 @@ i=1;
 
 wgs84 = wgs84Ellipsoid; % Define ellipsoid
 origin = [GPSpoints.Latitude(1),GPSpoints.Longitude(1),GPSpoints.Elevation(1)]; % Set first point as origin
-% Convert lat, lon to local coordinate system
+% Convert lat, lon to local coo
 [test.xEast,test.yNorth,test.zUp] = geodetic2enu(GPSpoints.Latitude,GPSpoints.Longitude,GPSpoints.Elevation,origin(1),origin(2),origin(3),wgs84);
