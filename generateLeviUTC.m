@@ -1,13 +1,18 @@
 function imgtime = generateLeviUTC(NUM_IMGsets,PointsInSet, date, path)
 %generateLeviUTC: Create image set UTC file for us in PickControlPoint
 %software
-% Inputs:
-%   NUM_IMGsets =   [#] How many different images are you using
-%   MaxNUMPointsinSet = [#] What is the maximum # of points per img  
-%   date    =   [yyyyMMdd](string) date of img capture
-% Outputs:
-%   
 
+%{ 
+Inputs:
+    NUM_IMGsets =   [#] How many different images are you using
+    MaxNUMPointsinSet = [#] What is the maximum # of points per img  
+    date    =   [yyyyMMdd](string) date of img capture
+ Outputs: 
+    imgtime = [1xN] The artifical "times" when the images were taken.  Used
+    to pass to generateLeviLLZ.m to sync the right GPS points to the img.
+    Wheere N is the number of frames.
+
+%}
 %% Input Parsing
 try
     capturedate=datetime(date,'InputFormat','yyyyMMdd');
