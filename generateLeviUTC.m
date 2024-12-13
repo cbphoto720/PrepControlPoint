@@ -4,14 +4,12 @@ function imgtime = generateLeviUTC(NUM_IMGsets,PointsInSet, date, path)
 
 %{ 
 Inputs:
-    NUM_IMGsets =   [#] How many different images are you using
-    MaxNUMPointsinSet = [#] What is the maximum # of points per img  
-    date    =   [yyyyMMdd](string) date of img capture
+    - NUM_IMGsets =   [#] How many different images are you using
+    - MaxNUMPointsinSet = [#] What is the maximum # of points per img  
+    - date    =   [yyyyMMdd](string) date of img capture
  Outputs: 
-    imgtime = [1xN] The artifical "times" when the images were taken.  Used
-    to pass to generateLeviLLZ.m to sync the right GPS points to the img.
-    Wheere N is the number of frames.
-
+    - imgtime = [datetime vector] The artifical "times" when the images were taken.  Used
+                to pass to generateLeviLLZ.m to sync the right GPS points to the img.
 %}
 %% Input Parsing
 try
