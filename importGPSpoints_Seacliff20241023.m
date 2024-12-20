@@ -60,7 +60,7 @@ text(GPSpoints.Latitude+offsety,GPSpoints.Longitude+offsetx,c)
 
 %% Scratch paper
 
-generateLeviUTC(10,5, '20241023', 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data');
+imgtime=generateLeviUTC(10,5, '20241023', 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\RAW');
 
 %%
 
@@ -71,32 +71,31 @@ origin = [GPSpoints.Latitude(1),GPSpoints.Longitude(1),GPSpoints.Elevation(1)]; 
 % Convert lat, lon to local coordinate system
 [test.xEast,test.yNorth,test.zUp] = geodetic2enu(GPSpoints.Latitude,GPSpoints.Longitude,GPSpoints.Elevation,origin(1),origin(2),origin(3),wgs84);
 
-%%
+%% Call Python script in order to modify the capture date of the img
 
-% MATLAB Script to Modify Image Metadata Using Python
-inputFile = 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated\Seacliff_1729704839\Seacliff_21217396_1729704851254.tif';  % Replace with your image path
-outputFile = 'modified_image.tif'; % Output file path
-newDate = '2024:10:23 15:30:00';   % Date format: YYYY:MM:DD HH:MM:SS
-
-% Python script to run
-pythonScript = 'update_metadata.py';
-
-% Construct the system command
-command = sprintf('python %s "%s" "%s" "%s"', pythonScript, inputFile, outputFile, newDate);
-
-% Execute the Python script
-[status, cmdout] = system(command);
-
-% Check for success
-if status == 0
-    disp('Metadata updated successfully.');
-    disp(cmdout);
-else
-    disp('Error occurred while updating metadata:');
-    disp(cmdout);
-end
-
-%%
+% % MATLAB Script to Modify Image Metadata Using Python
+% inputFile = 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated\Seacliff_1729704839\Seacliff_21217396_1729704851254.tif';  % Replace with your image path
+% outputFile = 'modified_image.tif'; % Output file path
+% newDate = '2024:10:23 15:30:00';   % Date format: YYYY:MM:DD HH:MM:SS
+% 
+% % Python script to run
+% pythonScript = 'update_metadata.py';
+% 
+% % Construct the system command
+% command = sprintf('python %s "%s" "%s" "%s"', pythonScript, inputFile, outputFile, newDate);
+% 
+% % Execute the Python script
+% [status, cmdout] = system(command);
+% 
+% % Check for success
+% if status == 0
+%     disp('Metadata updated successfully.');
+%     disp(cmdout);
+% else
+%     disp('Error occurred while updating metadata:');
+%     disp(cmdout);
+% end
+%% Validate that the img date has changed
 function imageDate = getImageDate(imagePath)
     % Get the image format (JPEG or TIFF)
     [~,~,ext] = fileparts(imagePath);
@@ -150,3 +149,16 @@ end
 
 imagePath = 'modified_image.tif';  % Specify your image path
 getImageDate(imagePath);
+
+%% Call python script to rename and move file images to create 
+% callPythonImageCopier('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
+%     'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\RAW', 5, '20241023UTCimgSets')
+
+%%
+x='20241023';
+generateLeviLLZ(GPSpoints, '20241023', imgtime, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\RAW');
+
+%% Call Matlab img copier/saver
+% 
+% imgcopiersaver('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
+%     'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\RAW', 5, '20241023UTCimgSets');

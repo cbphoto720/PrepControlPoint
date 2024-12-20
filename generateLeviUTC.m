@@ -16,7 +16,7 @@ try
     capturedate=datetime(date,'InputFormat','yyyyMMdd');
 catch
     error('Problem reading date.  Please use a char array or string [yyyymmdd]');
-    capturedate =datetime('20240101','InputFormat','yyyyMMdd');
+    % capturedate =datetime('20240101','InputFormat','yyyyMMdd');
 end
 
 p= inputParser;
@@ -40,13 +40,13 @@ varnames={'Framenumber','Time'};
 datatable=table(framenumber,imgtime,VariableNames=varnames);
 
 %% Create the text file
-filename=strcat(date,'UTCimgSets.txt');
+filename=strcat(date,'UTCimgSets.utc');
 fid=fopen(fullfile(path,filename),'w');
 fprintf(fid,'# of Frames: %d',size(datatable,1));
 for i=1:size(datatable,1)
     fprintf(fid, '\n%d) ',datatable{i,1});
     % fprintf(fid, '%.0s ',datatable{i,2});
-    fprintf(fid, '%s',string(datetime(datatable{i,2},"Format",'MM/dd/yyyy HH:mm:ss:mss')));
+    fprintf(fid, '%s:000',string(datetime(datatable{i,2},"Format",'MM/dd/yyyy HH:mm:ss:mss')));
 end
 fclose(fid);
 
