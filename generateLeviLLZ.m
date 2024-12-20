@@ -1,4 +1,4 @@
-function generateLeviLLZ(GPSpoints, date, imgtime, filename)
+function generateLeviLLZ(GPSpoints, date, imgtime)
 %generateLeviLLZ: Create survey data for the GPS points.  Generate a local
 %reference coordinate system & arrange Lon/Lat and time in the required
 %format for PickControlPointV5 software.
@@ -31,11 +31,15 @@ origin = [GPSpoints.Latitude(1),GPSpoints.Longitude(1),GPSpoints.Elevation(1)]; 
 %% Create the text file
 filename=strcat(date,'Survey.txt');
 fid=fopen(fullfile(path,filename),'w');
-fprintf(fid,'# of Frames: %d',size(datatable,1));
-for i=1:size(datatable,1)
-    fprintf(fid, '\n%d) ',datatable{i,1});
+fprintf(fid,'Year \t Month \t Day \t Hour \t Min \t Sec \t Lat \t Lon \t X \t Y \t Z',size(GPSpoints,1));
+for i=1:size(GPSpoints,1)
+    % Follow the header above to print the time (using imgtime) and add the
+    % Lat / Lon as well as the local.xEast ... etc
+
+
+    % fprintf(fid, '\n%d) ',GPSpoints{i,1});
     % fprintf(fid, '%.0s ',datatable{i,2});
-    fprintf(fid, '%s',string(datetime(datatable{i,2},"Format",'MM/dd/yyyy HH:mm:ss:mss')));
+     fprintf(fid, '%s',string(datetime(GPSpoints{i,2},"Format",'MM/dd/yyyy HH:mm:ss:mss')));
 end
 fclose(fid);
 
