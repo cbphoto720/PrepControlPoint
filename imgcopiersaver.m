@@ -27,7 +27,7 @@ function imgcopiersaver(inputFolder, outputFolder, numCopies, baseFilename)
         % Create copies with sequential numbering
         for copyIdx = 0:(numCopies - 1)
             % Generate the new filename
-            newFilename = sprintf('%s_%05d.tif', baseFilename, (fileIdx - 1) * numCopies + copyIdx);
+            newFilename = sprintf('%s_%02d.tif', baseFilename, (fileIdx - 1) * numCopies + copyIdx); %FLAG: leading zeros should be smart to account for the max # of frames
             outputFile = fullfile(outputFolder, newFilename);
 
             % Copy the file

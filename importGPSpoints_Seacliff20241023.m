@@ -160,5 +160,5 @@ generateLeviLLZ(GPSpoints, '20241023', imgtime, 'C:\Users\Carson\Documents\Git\S
 
 %% Call Matlab img copier/saver
 % 
-% imgcopiersaver('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
-%     'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\RAW', 5, '20241023UTCimgSets');
+imgcopiersaver('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
+    'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\RAW', 5, '20241023UTCimgSets');

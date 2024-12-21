@@ -46,7 +46,7 @@ fprintf(fid,'# of Frames: %d',size(datatable,1));
 for i=1:size(datatable,1)
     fprintf(fid, '\n%d) ',datatable{i,1});
     % fprintf(fid, '%.0s ',datatable{i,2});
-    fprintf(fid, '%s:000',string(datetime(datatable{i,2},"Format",'MM/dd/yyyy HH:mm:ss:mss')));
+    fprintf(fid, '%s:000',string(datetime(datatable{i,2},"Format",'MM/dd/yyyy HH:mm:ss:SSS')));
 end
 fclose(fid);
 
