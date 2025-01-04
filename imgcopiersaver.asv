@@ -30,16 +30,13 @@ function imgcopiersaver(inputFolder, outputFolder, numCopies, baseFilename)
             newFilename = sprintf('%s_%02d.tif', baseFilename, (fileIdx - 1) * numCopies + copyIdx); %FLAG: leading zeros should be smart to account for the max # of frames
             outputFile = fullfile(outputFolder, newFilename);
 
-            % Only create images with the 3 RGB channels
             if copyIdx==0
                 importimg=imread(inputFile);
-                newimg=importimg(:,:,1:3); % Only take the first 3 channels for RGB
-                imwrite(im2uint16(newimg), outputFile);
-
-                extracopies=outputFile; % New target for imgs to be copied from
-                % clear importimg, newimg
+                newimg=ans(:,:,1:3); % Only take the 3 RGB channels
+                imwrite(im2uint16(NewImage), outputFile);
+                extracopies=outputFile;
             else
-                % Copy the file more efficiently than opening it every time
+                % Copy the file
                 copyfile(extracopies, outputFile);
             end
         end
