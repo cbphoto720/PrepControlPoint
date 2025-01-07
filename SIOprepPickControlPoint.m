@@ -3,8 +3,9 @@ addpath(genpath("C:\Users\Carson\Documents\Git\SIOCameraRectification"));
 addpath("C:\Users\Carson\Documents\Git\cmcrameri\cmcrameri\cmaps") %Scientific color maps
 
 %% Options
-
-NUM_IMGsets=10;
+maxPointsInSet=5; % The max number of ground control targets in a frame (usually 5)
+date="20241023"; %date of survey
+cameraSerialNumber=21217396; %The camera "Serial Number" is the 8 digit code included in the filename of the image e.g. 21217396
 
 
 %% Import iG8 data
@@ -21,6 +22,7 @@ end
 
 %% Plot GPS points on a Map
 load("hawaiiS.txt"); %load color map
+NUM_IMGsets=size(unique(GPSpoints(:,2)),1);
 
 plt=geoscatter(GPSpoints.Latitude(1),GPSpoints.Longitude(1),36,hawaiiS(1), "filled"); %plot the first point
 geobasemap satellite
@@ -39,7 +41,7 @@ hold off
 % Set figure size
 set(0,'units','pixels');
 scr_siz = get(0,'ScreenSize');
-set(gcf,'Position',[floor([10 50 scr_siz(3)*0.8 scr_siz(4)*0.5])]);
+set(gcf,'Position',[floor([10 150 scr_siz(3)*0.8 scr_siz(4)*0.5])]);
 
 
 % Add labels
@@ -67,12 +69,39 @@ else
     GPSmask=inROI(roi,GPSpoints.Latitude,GPSpoints.Longitude);
 end
 
+%% Create new survey file base off points in ROI
+% Prompt user for Camera number
+prompt = {'Enter the Camera number for this site:'};
+dlgtitle = 'Camera Number';
+dims = [1 50];
+definput = {'1'};
+camnumber = inputdlg(prompt,dlgtitle,dims,definput);
+
+% Create new file extension
+smallfile=file;
+smallfile=smallfile(1:end-4);
+smallfile=smallfile+"_Camera"+camnumber{1}+".txt";
+
+writetable(GPSpoints(GPSmask,:),fullfile(location,smallfile),"Delimiter"," ");
+sprintf('Saved new GPS survey file of points visible to cam%d here: %s\n',camnumber,fullfile(location,smallfile))
+
+%% Generate the files
+unique(GPSpoints.Code(:))
+
+
+imgtime=generateLeviUTC(size(unique(GPSpoints(GPSmask,2)),1),maxPointsInSet, date, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
+generateLeviLLZ(GPSpoints(GPSmask,:), date, imgtime, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
+
+imgcopiersaver('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
+    'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW', 5, '20241023UTCimgSets',cameraSerialNumber);
+
+
 %% mask of the GPS survey
-        % save the survey file to a new folder (for future GPS reference
-            % [don't need to draw ROI every time])
-        % creat the UTC file in the new folder
-        % create the LLZ file in the new folder
 % Select the image folder containing files
         % confirm camera extension
         % copy img files to new folder with the corresponding # of points
-            % per img
+            % per img.
+
+
+% HAVE THE IMAGECOPIERSAVER ASK THE USER HOW MANY GCPs are visible for each
+% image set
