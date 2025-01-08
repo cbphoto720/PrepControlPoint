@@ -86,11 +86,17 @@ writetable(GPSpoints(GPSmask,:),fullfile(location,smallfile),"Delimiter"," ");
 sprintf('Saved new GPS survey file of points visible to cam%d here: %s\n',camnumber,fullfile(location,smallfile))
 
 %% Generate the files
-unique(GPSpoints.Code(:))
+
+% Generate number of frames from each survey set
+num_of_IMGsets=unique(GPSpoints.Code(:));
+IMGsetIDX=zeros(length(num_of_IMGsets),1);
+for i=1:length(num_of_IMGsets)
+    IMGsetIDX(i)=sum(GPSpoints.Code(:)==num_of_IMGsets(i));
+end
 
 
-imgtime=generateLeviUTC(size(unique(GPSpoints(GPSmask,2)),1),maxPointsInSet, date, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
-generateLeviLLZ(GPSpoints(GPSmask,:), date, imgtime, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
+imgtime=generateLeviUTC(size(num_of_IMGsets,1), IMGsetIDX, date, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
+generateLeviLLZ(GPSpoints, date, imgtime, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
 
 imgcopiersaver('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
     'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW', 5, '20241023UTCimgSets',cameraSerialNumber);

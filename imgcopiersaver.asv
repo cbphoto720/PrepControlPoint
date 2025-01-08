@@ -8,18 +8,16 @@ function imgcopiersaver(inputFolder, outputFolder, numCopies, baseFilename, camS
     %   baseFilename (string): Common base filename for all processed images.
     %   camSN: The camera "Serial Number" is the 8 digit code included in the filename of the image e.g. _21217396_
     %% Input Parsing
-    camSNdatabase=[21217396,22296748,22296760];
-
     p= inputParser;
     validScalarPosNum = @(x) isnumeric(x) && isscalar(x) && (x > 0);
     validPosNx1Matrix = @(x) isnumeric(x) && ismatrix(x) && size(x, 2) == 1 && all(x > 0);
-    validCamSN = @(x) any(x==camSNdatabase);
-   
+    validDate = @(x) datetime(capturedate,'Format','yyyyMMdd')==x;
+    
+    addRequired(p, 'NUM_IMGsets',validScalarPosNum);
+    addRequired(p, 'numCopies',@(x) validScalarPosNum(x) || validPosNx1Matrix(x));
+    addRequired(p, 'date',validDate);
     addRequired(p, 'inputFolder',@(x) isfolder(x));
     addRequired(p, 'outputFolder',@(x) isfolder(x));
-    addRequired(p, 'numCopies',@(x) validScalarPosNum(x) || validPosNx1Matrix(x));
-    
-    addRequired(p, 'camSN',@(x) validCamSN);
     
     parse(p,inputFolder,outputFolder,numCopies, date, path);
 

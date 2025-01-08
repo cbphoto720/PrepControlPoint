@@ -1,4 +1,4 @@
-function imgtime = generateLeviUTC(NUM_IMGsets,maxPointsInSet, date, path)
+function imgtime = generateLeviUTC(NUM_IMGsets,PointsInSet, date, path)
 %generateLeviUTC: Create image set UTC file for us in PickControlPoint
 %software
 
@@ -21,23 +21,35 @@ end
 
 p= inputParser;
 validScalarPosNum = @(x) isnumeric(x) && isscalar(x) && (x > 0);
+validPosNx1Matrix = @(x) isnumeric(x) && ismatrix(x) && size(x, 2) == 1 && all(x > 0);
 validDate = @(x) datetime(capturedate,'Format','yyyyMMdd')==x;
 
 addRequired(p, 'NUM_IMGsets',validScalarPosNum);
-addRequired(p, 'maxPointsInSet',validScalarPosNum);
+addRequired(p, 'PointsInSet',@(x) validScalarPosNum(x) || validPosNx1Matrix(x));
 addRequired(p, 'date',validDate);
 addRequired(p, 'path',@(x) isfolder(x));
 
-parse(p,NUM_IMGsets,maxPointsInSet, date, path);
+parse(p,NUM_IMGsets,PointsInSet, date, path);
 %% Generate data
-framenumber=[0:1:(NUM_IMGsets*maxPointsInSet)-1]';
-
-starttime=datetime(date,'InputFormat','yyyyMMdd', 'Format', 'HH:mm:ss.SSS');
-arbitrary_interval=seconds(2);
-imgtime=starttime + (0:length(framenumber)-1)' * arbitrary_interval;
-
-varnames={'Framenumber','Time'};
-datatable=table(framenumber,imgtime,VariableNames=varnames);
+if validPosNx1Matrix(PointsInSet)
+    framenumber=[0:1:(sum(PointsInSet))-1]';
+    
+    starttime=datetime(date,'InputFormat','yyyyMMdd', 'Format', 'HH:mm:ss.SSS');
+    arbitrary_interval=seconds(2);
+    imgtime=starttime + (0:length(framenumber)-1)' * arbitrary_interval;
+    
+    varnames={'Framenumber','Time'};
+    datatable=table(framenumber,imgtime,VariableNames=varnames);
+else
+    framenumber=[0:1:(NUM_IMGsets*PointsInSet)-1]';
+    
+    starttime=datetime(date,'InputFormat','yyyyMMdd', 'Format', 'HH:mm:ss.SSS');
+    arbitrary_interval=seconds(2);
+    imgtime=starttime + (0:length(framenumber)-1)' * arbitrary_interval;
+    
+    varnames={'Framenumber','Time'};
+    datatable=table(framenumber,imgtime,VariableNames=varnames);
+end
 
 %% Create the text file
 filename=strcat(date,'UTCimgSets.utc');
