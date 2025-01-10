@@ -53,15 +53,32 @@ end
 
 %% Create the text file
 filename=strcat(date,'UTCimgSets.utc');
-fid=fopen(fullfile(path,filename),'w');
-fprintf(fid,'# of Frames: %d',size(datatable,1));
-for i=1:size(datatable,1)
-    fprintf(fid, '\n%d) ',datatable{i,1});
-    % fprintf(fid, '%.0s ',datatable{i,2});
-    fprintf(fid, '%s:000',string(datetime(datatable{i,2},"Format",'MM/dd/yyyy HH:mm:ss:SSS')));
-end
-fclose(fid);
 
-fprintf('Success! File has been created here: %s\n',fullfile(path,filename))
+% Check if the file already exists
+overwriteFile = true; % Default to overwriting or creating new file.
+if exist(fullfile(path,filename),'file')
+    promptMessage = sprintf('This file already exists:\n%s\nDo you want to overwrite it?', filename);
+    titleBarCaption = 'Overwrite?';
+    buttonText = questdlg(promptMessage, titleBarCaption, 'Yes', 'No', 'Yes');
+    if strcmpi(buttonText, 'No')
+        % User does not want to overwrite. 
+        % Set flag to not do the write.
+        overwriteFile = false;
+        error('user chose not to overwrite the existing file');
+    end
+end
+if overwriteFile
+    fid=fopen(fullfile(path,filename),'w');
+
+    fprintf(fid,'# of Frames: %d',size(datatable,1));
+    for i=1:size(datatable,1)
+        fprintf(fid, '\n%d) ',datatable{i,1});
+        % fprintf(fid, '%.0s ',datatable{i,2});
+        fprintf(fid, '%s:000',string(datetime(datatable{i,2},"Format",'MM/dd/yyyy HH:mm:ss:SSS')));
+    end
+    fclose(fid);
+    
+    fprintf('Success! File has been created here: %s\n',fullfile(path,filename))
+end
 
 end
