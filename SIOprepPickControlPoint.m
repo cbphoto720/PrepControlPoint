@@ -96,10 +96,10 @@ end
 
 
 imgtime=generateLeviUTC(size(num_of_IMGsets,1), IMGsetIDX, date, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
-generateLeviLLZ(GPSpoints, date, imgtime, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
+% generateLeviLLZ(GPSpoints, date, imgtime, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
 
-imgcopiersaver('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
-    'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW', 5, '20241023UTCimgSets',cameraSerialNumber);
+% imgcopiersaver('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
+    % 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW', IMGsetIDX,cameraSerialNumber);
 
 
 %% mask of the GPS survey
