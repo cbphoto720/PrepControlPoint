@@ -2,10 +2,18 @@ close all; clear all; clc
 addpath(genpath("C:\Users\Carson\Documents\Git\SIOCameraRectification"));
 addpath("C:\Users\Carson\Documents\Git\cmcrameri\cmcrameri\cmaps") %Scientific color maps
 
+camSNdatabase=[21217396,22296748,22296760];
 %% Options
 maxPointsInSet=5; % The max number of ground control targets in a frame (usually 5)
 date="20241023"; %date of survey
-cameraSerialNumber=21217396; %The camera "Serial Number" is the 8 digit code included in the filename of the image e.g. 21217396
+cameraSerialNumber=22296760; %The camera "Serial Number" is the 8 digit code included in the filename of the image e.g. 21217396
+
+outputfolderpath="C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\CamC";
+if ~isfolder(outputfolderpath)
+    mkdir(outputfolderpath);
+elseif isfolder(outputfolderpath)
+    warning("Output folder already exists, make sure you don't overwrite another camera!\n%s",outputfolderpath);
+end
 
 
 %% Import iG8 data
@@ -83,7 +91,7 @@ smallfile=smallfile(1:end-4);
 smallfile=smallfile+"_Camera"+camnumber{1}+".txt";
 
 writetable(GPSpoints(GPSmask,:),fullfile(location,smallfile),"Delimiter"," ");
-sprintf('Saved new GPS survey file of points visible to cam%d here: %s\n',camnumber,fullfile(location,smallfile))
+sprintf('Saved new GPS survey file of points visible to cam%d here: %s\n',str2double(camnumber),fullfile(location,smallfile))
 
 %% Generate the files
 
@@ -95,11 +103,11 @@ for i=1:length(num_of_IMGsets)
 end
 
 
-imgtime=generateLeviUTC(size(num_of_IMGsets,1), IMGsetIDX, date, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
-generateLeviLLZ(GPSpoints, date, imgtime, 'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW');
+imgtime=generateLeviUTC(size(num_of_IMGsets,1), IMGsetIDX, date, outputfolderpath);
+generateLeviLLZ(GPSpoints, date, imgtime, outputfolderpath);
 
 imgcopiersaver('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
-    'C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\NEW', IMGsetIDX,cameraSerialNumber);
+    outputfolderpath, IMGsetIDX,cameraSerialNumber);
 
 
 %% mask of the GPS survey
