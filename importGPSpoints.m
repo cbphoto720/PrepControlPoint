@@ -46,6 +46,9 @@ GPSpoints = readtable(filename, opts);
 
 tableshape=size(GPSpoints);
 
+%FLAG I think that the long, lat, northings, eastings error is not
+%applicable in this version.  The signs are handled by negative numbers
+
 % Assign + or - Longitude
 for i=1:tableshape(1)
     if(GPSpoints.Longitude{i}(end)=='W')
@@ -54,7 +57,7 @@ for i=1:tableshape(1)
     elseif(GPSpoints.Longitude{i}(end)=='E')
         GPSpoints.Longitude{i}(end)=[];
     else
-        disp('Longitude import error.  Unknown coordinate reference (define W or E by appending)')
+        % disp('Longitude import error.  Unknown coordinate reference (define W or E by appending)')
     end
 end
 
@@ -66,7 +69,7 @@ for i=1:tableshape(1)
     elseif(GPSpoints.Latitude{i}(end)=='N')
         GPSpoints.Latitude{i}(end)=[];
     else
-        disp('Latitude import error.  Unknown coordinate reference (define N or S by appending)')
+        % disp('Latitude import error.  Unknown coordinate reference (define N or S by appending)')
     end
 end
 
@@ -78,7 +81,7 @@ for i=1:tableshape(1)
     elseif(GPSpoints.Northings{i}(end)=='N')
         GPSpoints.Northings{i}(end)=[];
     else
-        disp('Northings import error.  Unknown coordinate reference (define N or S by appending)')
+        % disp('Northings import error.  Unknown coordinate reference (define N or S by appending)')
     end
 end
 
@@ -90,7 +93,7 @@ for i=1:tableshape(1)
     elseif(GPSpoints.Eastings{i}(end)=='E')
         GPSpoints.Eastings{i}(end)=[];
     else
-        disp('Eastings import error.  Unknown coordinate reference (define E or W by appending)')
+        % disp('Eastings import error.  Unknown coordinate reference (define E or W by appending)')
     end
 end
 
