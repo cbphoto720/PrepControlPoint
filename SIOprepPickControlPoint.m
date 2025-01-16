@@ -3,15 +3,25 @@ addpath(genpath("C:\Users\Carson\Documents\Git\SIOCameraRectification"));
 addpath("C:\Users\Carson\Documents\Git\cmcrameri\cmcrameri\cmaps") %Scientific color maps
 
 camSNdatabase=[21217396,22296748,22296760];
+%% Convert camera Params function (only need to run 1 time)
+
+ConverCameraParamstoPCPparams("\\sio-smb.ucsd.edu\CPG-Projects-Ceph\SeacliffCam\IntrinsicCalibration\camB\results",...
+    "camB_cameraParams.mat", "\\sio-smb.ucsd.edu\CPG-Projects-Ceph\SeacliffCam\IntrinsicCalibration\camB\results\test")
+
 %% Options
 maxPointsInSet=5; % The max number of ground control targets in a frame (usually 5)
 date="20241023"; %date of survey
-cameraSerialNumber=22296760; %The camera "Serial Number" is the 8 digit code included in the filename of the image e.g. 21217396
 
-outputfolderpath="C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\CamC";
+cameraSerialNumber=21217396; %The camera "Serial Number" is the 8 digit code included in the filename of the image e.g. 21217396
+% Seacliff Camera coordinates: ** VERY APPROXIMATE:    
+GPSCamCoords=[36.9700186673744, -121.90751838240702, 27.8];
+
+
+outputfolderpath="C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\CamB\test1";
 if ~isfolder(outputfolderpath)
     mkdir(outputfolderpath);
 elseif isfolder(outputfolderpath)
+    f=msgbox("Output folder already exists, make sure you don't overwrite another camera!",outputfolderpath);
     warning("Output folder already exists, make sure you don't overwrite another camera!\n%s",outputfolderpath);
 end
 
@@ -103,19 +113,16 @@ for i=1:length(num_of_IMGsets)
 end
 
 
+% Generate .utc
 imgtime=generateLeviUTC(size(num_of_IMGsets,1), IMGsetIDX, date, outputfolderpath);
-generateLeviLLZ(GPSpoints, date, imgtime, outputfolderpath);
 
+% Genereate .llz
+firstpointOrigin=generateLeviLLZ(GPSpoints, date, imgtime, outputfolderpath);
+
+% Copy images to the proper
 imgcopiersaver('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
     outputfolderpath, IMGsetIDX,cameraSerialNumber);
 
+%% Generate Camera Params (levi software)
 
-%% mask of the GPS survey
-% Select the image folder containing files
-        % confirm camera extension
-        % copy img files to new folder with the corresponding # of points
-            % per img.
-
-
-% HAVE THE IMAGECOPIERSAVER ASK THE USER HOW MANY GCPs are visible for each
-% image set
+ LocalCamCoordinates = GenerateCamExtrinsicEstimate(firstpointOrigin,GPSCamCoords, outputfolderpath);
