@@ -1,4 +1,4 @@
-function generateLeviLLZ(GPSpoints, date, imgtime, path)
+function localOrigin=generateLeviLLZ(GPSpoints, date, imgtime, path)
 %generateLeviLLZ: Create survey data for the GPS points.  Generate a local
 %reference coordinate system & arrange Lon/Lat and time in the required
 %format for PickControlPointV5 software.
@@ -40,9 +40,9 @@ try
 end
 %% Generate Data
 wgs84 = wgs84Ellipsoid; % Define ellipsoid
-origin = [GPSpoints.Latitude(1),GPSpoints.Longitude(1),GPSpoints.Elevation(1)]; % Set first point as origin
+localOrigin = [GPSpoints.Latitude(1),GPSpoints.Longitude(1),GPSpoints.Elevation(1)]; % Set first point as origin
 % Convert lat, lon to local coordinate system
-[local.xEast,local.yNorth,local.zUp] = geodetic2enu(GPSpoints.Latitude,GPSpoints.Longitude,GPSpoints.Elevation,origin(1),origin(2),origin(3),wgs84);
+[local.xEast,local.yNorth,local.zUp] = geodetic2enu(GPSpoints.Latitude,GPSpoints.Longitude,GPSpoints.Elevation,localOrigin(1),localOrigin(2),localOrigin(3),wgs84);
 
 % add delay to imgtime
 imgtime=imgtime+milliseconds(250);
