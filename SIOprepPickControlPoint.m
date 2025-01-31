@@ -17,7 +17,7 @@ cameraSerialNumber=21217396; %The camera "Serial Number" is the 8 digit code inc
 GPSCamCoords=[36.9700186673744, -121.90751838240702, 27.8];
 
 
-outputfolderpath="C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\CamB\test1";
+outputfolderpath="\\sio-smb.ucsd.edu\CPG-Projects-Ceph\SeacliffCam\20250123_GCP\RectifySet_CameraC";
 if ~isfolder(outputfolderpath)
     mkdir(outputfolderpath);
 elseif isfolder(outputfolderpath)
@@ -89,10 +89,10 @@ end
 
 %% Create new survey file base off points in ROI
 % Prompt user for Camera number
-prompt = {'Enter the Camera number for this site:'};
-dlgtitle = 'Camera Number';
+prompt = {'Enter the Camera Letter for this site:'};
+dlgtitle = 'Camera Name';
 dims = [1 50];
-definput = {'1'};
+definput = {'A'};
 camnumber = inputdlg(prompt,dlgtitle,dims,definput);
 
 % Create new file extension
@@ -101,7 +101,8 @@ smallfile=smallfile(1:end-4);
 smallfile=smallfile+"_Camera"+camnumber{1}+".txt";
 
 writetable(GPSpoints(GPSmask,:),fullfile(location,smallfile),"Delimiter"," ");
-sprintf('Saved new GPS survey file of points visible to cam%d here: %s\n',str2double(camnumber),fullfile(location,smallfile))
+clear GPSpoints, GPSmask;
+fprintf('Saved new GPS survey file of points visible to cam%s.  \nPlease re-load the file here to continue: %s\n',camnumber{1},fullfile(location,smallfile))
 
 %% Generate the files
 
@@ -120,7 +121,7 @@ imgtime=generateLeviUTC(size(num_of_IMGsets,1), IMGsetIDX, date, outputfolderpat
 firstpointOrigin=generateLeviLLZ(GPSpoints, date, imgtime, outputfolderpath);
 
 % Copy images to the proper
-imgcopiersaver('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\Annotated',...
+imgcopiersaver('\\sio-smb.ucsd.edu\CPG-Projects-Ceph\SeacliffCam\20250123_GCP\usable-imgs',...
     outputfolderpath, IMGsetIDX,cameraSerialNumber);
 
 %% Generate Camera Params (levi software)
