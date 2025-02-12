@@ -14,10 +14,10 @@ date="20241023"; %date of survey
 
 cameraSerialNumber=21217396; %The camera "Serial Number" is the 8 digit code included in the filename of the image e.g. 21217396
 % Seacliff Camera coordinates: ** VERY APPROXIMATE:    
-GPSCamCoords=[36.9700186673744, -121.90751838240702, 27.8];
+GPSCamCoords=[36.9699953088, -121.9075239352, 31.333];
 
 
-outputfolderpath="\\sio-smb.ucsd.edu\CPG-Projects-Ceph\SeacliffCam\20250123_GCP\RectifySet_CameraC";
+outputfolderpath="C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\CamB";
 if ~isfolder(outputfolderpath)
     mkdir(outputfolderpath);
 elseif isfolder(outputfolderpath)
