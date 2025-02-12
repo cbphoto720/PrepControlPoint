@@ -1,3 +1,5 @@
+% Conver alll variables into .txt docs (used to help make SIO_camDatabase)
+
 % Get all variables in the workspace
 vars = whos; 
 
