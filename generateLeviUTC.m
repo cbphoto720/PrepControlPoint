@@ -10,6 +10,9 @@ Inputs:
  Outputs: 
     - imgtime = [datetime vector] The artifical "times" when the images were taken.  Used
                 to pass to generateLeviLLZ.m to sync the right GPS points to the img.
+
+Created by Carson Black on 20241212.
+ccblack@ucsd.edu
 %}
 %% Input Parsing
 try

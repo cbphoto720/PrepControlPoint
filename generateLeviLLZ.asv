@@ -10,7 +10,7 @@ Inputs:
     - imgtime   =   [datetime vector] Spoofed data of img capture times.
                     GPS shots are recorded a few seconds after.
 
-Created by Carson Black on 20241209.
+Created by Carson Black on 20240821.
 ccblack@ucsd.edu
 %}
 %% Input Parsing
