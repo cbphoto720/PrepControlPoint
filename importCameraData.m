@@ -12,17 +12,18 @@ Inputs:
 
 %}
 %% Input parsing for filename
-    p = inputParser;
-
-    checkTableFields = @(tbl) istable(tbl) && all(ismember({'Cam_SN', 'Latitude', 'Elevation'}, tbl.Properties.VariableNames)); %WIP checl valid file path and that the table is valid (see GeneratreLeviLLZ)
-
-    addRequired(p, 'filename', checkTableFields && exist(x, 'file') == 2); % Check for valid file path
-    addRequired(p, 'searchKey', @(x) ischar(x) || isnumeric(x)); % Check for either string or numeric search key
-    parse(p, Path_to_SIO_CamDatabase, searchKey);
+    %WIP input parsing disabled
+    % p = inputParser;
+    % 
+    % checkTableFields = @(tbl) istable(tbl) && all(ismember({'Cam_SN', 'Latitude', 'Elevation'}, tbl.Properties.VariableNames)); %WIP checl valid file path and that the table is valid (see GeneratreLeviLLZ)
+    % 
+    % addRequired(p, 'filename', checkTableFields && exist(x, 'file') == 2); % Check for valid file path
+    % addRequired(p, 'searchKey', @(x) ischar(x) || isnumeric(x)); % Check for either string or numeric search key
+    % parse(p, Path_to_SIO_CamDatabase, searchKey);
     
-    % Now, we can safely use p.Results.filename and p.Results.searchKey
-    Path_to_SIO_CamDatabase = p.Results.Path_to_SIO_CamDatabase;
-    searchKey = p.Results.searchKey;
+    % % Now, we can safely use p.Results.filename and p.Results.searchKey
+    % Path_to_SIO_CamDatabase = p.Results.Path_to_SIO_CamDatabase;
+    % searchKey = p.Results.searchKey;
 
 %%
 
