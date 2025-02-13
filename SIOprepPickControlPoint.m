@@ -1,23 +1,39 @@
-close all; clear all; clc
+% Tehcnically PrepControlPointV1
+% now this is scratch paper for trying out pieces of the code
+
+%% Ask before deleting
+fig = uifigure;
+msg = "About to wipe all variables! Are you sure you want to continue?";
+title = "Start Program";
+selection=uiconfirm(fig,msg,title, ...
+    "Options",{'Ready to start','Cancel'}, ...
+    "DefaultOption",1);
+switch selection
+    case 'Ready to start'
+        % Close all figures, wipe all variables, start the program
+        close(fig);
+        close all; clear all; clc
+    case 'Cancel'
+        close(fig);
+        error('User selected cancel.  Please save you variables before getting started.')
+end
+mfilename('fullpath')
+%%
 addpath(genpath("C:\Users\Carson\Documents\Git\SIOCameraRectification"));
 addpath("C:\Users\Carson\Documents\Git\cmcrameri\cmcrameri\cmaps") %Scientific color maps
 
 camSNdatabase=[21217396,22296748,22296760];
-%% Convert camera Params function (only need to run 1 time)
-
-ConverCameraParamstoPCPparams("\\sio-smb.ucsd.edu\CPG-Projects-Ceph\SeacliffCam\IntrinsicCalibration\camB\results",...
-    "camB_cameraParams.mat", "\\sio-smb.ucsd.edu\CPG-Projects-Ceph\SeacliffCam\IntrinsicCalibration\camB\results\test")
 
 %% Options
-maxPointsInSet=5; % The max number of ground control targets in a frame (usually 5)
-date="20241023"; %date of survey
+maxPointsInSet=5; % The max number of ground control targets in a single frame (usually 5)
+date="20250122"; %date of survey
 
 cameraSerialNumber=21217396; %The camera "Serial Number" is the 8 digit code included in the filename of the image e.g. 21217396
 % Seacliff Camera coordinates: ** VERY APPROXIMATE:    
 GPSCamCoords=[36.9699953088, -121.9075239352, 31.333];
 
 
-outputfolderpath="C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20241023\CamB";
+outputfolderpath="C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20250122\CamB";
 if ~isfolder(outputfolderpath)
     mkdir(outputfolderpath);
 elseif isfolder(outputfolderpath)
@@ -127,3 +143,11 @@ imgcopiersaver('\\sio-smb.ucsd.edu\CPG-Projects-Ceph\SeacliffCam\20250123_GCP\us
 %% Generate Camera Params (levi software)
 
  LocalCamCoordinates = GenerateCamExtrinsicEstimate(firstpointOrigin,GPSCamCoords, outputfolderpath);
+
+%% read in the CamDatabase
+
+opts = detectImportOptions("SIO_CamDatabase.txt", "Delimiter", "\t");
+
+opts.SelectedVariableNames = ["CamSN","CamNickname","Date"];
+opts.MissingRule="omitrow";
+readtable("SIO_CamDatabase.txt",opts)
