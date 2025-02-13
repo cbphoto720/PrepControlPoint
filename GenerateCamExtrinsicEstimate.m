@@ -1,10 +1,11 @@
-function LocalCamCoords = GenerateCamExtrinsicEstimate(LocalSurveyOrigin,GPSCamCoords, outputfolder)
+function LocalCamCoords = GenerateCamExtrinsicEstimate(Center_Controlpoint_est,GPSCamCoords, outputfolder)
 %GenerateCamExtrinsic will attempt to create a "first pass" estimate of
 %camera position, pitch, roll, & azimuth for the Levi PickControlPoint software
 
 %{
 Inputs:
-    - LocalSurveyOrigin         =   [Lat, Lon, Elevation] GPS Position of the survey.llz local Origin coordinates.
+    - Center_Controlpoint_est   =   [Lat, Lon, Elevation] GPS Position of a point close to the center 
+                                    & bottom of the camera frame. (a point in the middle of the beach)
     - GPSCamCoords              =   [Lat, Lon, Elevation] GPS position of the camera
     - outputfolder              =   Folder location to save the .txt file
     
@@ -23,7 +24,7 @@ Outputs:
 wgs84 = wgs84Ellipsoid; % Define ellipsoid
 
 % Convert lat, lon to local coordinate system
-[xEast,yNorth,zUp] = geodetic2enu(GPSCamCoords(1),GPSCamCoords(2),GPSCamCoords(3),LocalSurveyOrigin(1),LocalSurveyOrigin(2),LocalSurveyOrigin(3),wgs84);
+[xEast,yNorth,zUp] = geodetic2enu(GPSCamCoords(1),GPSCamCoords(2),GPSCamCoords(3),Center_Controlpoint_est(1),Center_Controlpoint_est(2),Center_Controlpoint_est(3),wgs84);
 
 % Calculate the vector components
 dx = -xEast; % Change in x (relative to origin)
