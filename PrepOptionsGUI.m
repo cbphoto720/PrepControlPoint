@@ -84,6 +84,20 @@ function [answers, cancelled] = PrepOptionsGUI(DefaultOptions)
     r = r + 1;
     c = 1;
 
+    Prompt(end+1,:) = {'Usable Images Folder', 'UsableIMGsFolder', []};
+    Formats(r,c).type = 'edit';
+    Formats(r,c).format = 'dir';
+    Formats(r,c).size = [-1 0];
+    Formats(r,c).span = [1 2]; % Spanning across columns
+    if ~isfield(DefAns, 'OutputFolder')
+        DefAns.OutputFolder = pwd; % Default to current directory
+    end
+    if ~isfield(DefAns, 'UsableIMGsFolder')
+        DefAns.UsableIMGsFolder = ''; % Default to empty
+    end
+    r = r + 1;
+    c = 1;
+
     % EXPORTS
     r = r + 2; % Extra space
 
