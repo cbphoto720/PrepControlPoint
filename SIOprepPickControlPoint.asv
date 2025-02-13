@@ -188,27 +188,26 @@ function interactive_zoom_display(imgfile)
     zoom_bar = uicontrol('Style', 'text', 'Parent', fig, ...
                          'Units', 'normalized', 'Position', [0.7, 0.2, 0.25, 0.05], ...
                          'BackgroundColor', [0.8 0.8 0.8], 'FontSize', 12, ...
-                         'String', 'Zoom Level: 1000');
+                         'String', 'Zoom Level: 10');
 
     % Button panel (bottom row)
     button_panel = uipanel(fig, 'Position', [0, 0, 1, 0.15]);
-    imax=12; % set max buttons (plus 1 extra for BACK)
-    for i = 0:imax
-        if i==imax
+    for i = 1:11
+        if i==11
             uicontrol('Style', 'pushbutton', 'Parent', button_panel, ...
                   'String', 'BACK', 'Units', 'normalized', ...
-                  'Position', [(i)*1/(imax+1), 0, 1/(imax+1), 1], ...
+                  'Position', [(i-1)*0.090909, 0, 0.090909, 1], ...
                   'FontSize', 12, 'Callback', @(src, event) button_callback(i));
         else
             uicontrol('Style', 'pushbutton', 'Parent', button_panel, ...
                   'String', num2str(i), 'Units', 'normalized', ...
-                  'Position', [(i)*1/(imax+1), 0, 1/(imax+1), 1], ...
+                  'Position', [(i-1)*0.090909, 0, 0.090909, 1], ...
                   'FontSize', 12, 'Callback', @(src, event) button_callback(i));
         end
     end
 
-    % Shared zoom size
-    zoom_size = 1000; % Start with least zoomed-in view
+    % Shared zoom size (inverted: 200 = Max Zoom, 10 = Min Zoom)
+    zoom_size = 200; % Start with least zoomed-in view
 
     % Store zoom level using guidata
     data.zoom_size = zoom_size;
@@ -216,6 +215,8 @@ function interactive_zoom_display(imgfile)
     data.ax_main = ax_main;
     data.ax_zoom = ax_zoom;
     data.zoom_bar = zoom_bar;
+    % Display zoom as a ratio (1:1, 2:1, etc.)
+    set(data.zoom_bar, 'String', sprintf('Zoom: %.1fx', data.zoom_size / 200));
     guidata(fig, data);
 
     % Set callbacks
@@ -265,7 +266,7 @@ function adjust_zoom_level(fig, event)
 
 
     % Update zoom level bar text (flipped scale)
-    set(data.zoom_bar, 'String', sprintf('Zoom Level: %d', data.zoom_size)); 
+    set(data.zoom_bar, 'String', sprintf('Zoom Level: %d', 210 - data.zoom_size)); 
 
     % Save updated zoom size
     guidata(fig, data);
@@ -275,13 +276,5 @@ function button_callback(num)
     disp(['Button ' num2str(num) ' pressed!']);
 end
 
-imgfile='Seacliff_22296748_1737653186039.tif';
+imgfile='Seacliff_21217396_1729704851254.tif';
 interactive_zoom_display(imgfile);
-%%
-% Get img filenames
-files = dir('C:\Users\Carson\Documents\Git\SIOCameraRectification\data\20250122\usable-imgs\*.tif');
-filenames = {files.name};
-
-for fileIDX=1:length(filenames)
-    interactive_zoom_display(files(fileIDX).name);
-end
