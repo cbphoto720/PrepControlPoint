@@ -3,7 +3,9 @@ function GPSpoints = importGPSpoints(filename)
 %{   
 Currently, this code will break if you have a description for some
 points but not others.  You can edit the text file to either delete all
-descriptions or make up placeholder descriptions for those missing.
+descriptions or make up placeholder descriptions for those missing.  It is
+reccomended to make descriptions in the field, because a long list gets
+confusing months after the shots were taken!
 
   Example:
   GPSpoints = importfile("\\reefbreak.ucsd.edu\group\SD24\GCP_20240819\20240819_FletcherCamGCPs.txt");
@@ -13,9 +15,13 @@ descriptions or make up placeholder descriptions for those missing.
     
 
 Created by Carson Black on 20240821.
-ccblack@ucsd.edu
-
 %}
+%% Input parsing
+p= inputParser;
+checkTableFields = @(tbl) istable(tbl) && all(ismember({'Longitude', 'Latitude', 'Elevation'}, tbl.Properties.VariableNames));
+
+addRequired(p, 'filename',checkTableFields);
+
 %% Set up the Import Options and import the data
 opts = delimitedTextImportOptions("NumVariables", 17); % We are only interested in the first 17 variables because the rest are repeats.
 
