@@ -11,7 +11,6 @@ Inputs:
                     GPS shots are recorded a few seconds after.
 
 Created by Carson Black on 20241209.
-ccblack@ucsd.edu
 %}
 %% Input Parsing
 try
