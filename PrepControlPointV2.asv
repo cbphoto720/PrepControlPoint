@@ -318,7 +318,7 @@ function update_zoom(fig)
     zoomed_img = img(y-half_size:y+half_size, x-half_size:x+half_size, :);
 
     % Resize zoomed image to fit zoom window
-    zoomed_img = imresize(zoomed_img, [400 400]); 
+    zoomed_img = imresize(zoomed_img, [200 200]); 
 
     % Update zoom figure
     imshow(zoomed_img, 'Parent', ax_zoom);
@@ -331,6 +331,10 @@ function adjust_zoom_level(fig, event)
     % Adjust zoom size
     zoom_change = -30;
     data.zoom_size = max(10, min(1000, data.zoom_size - zoom_change * event.VerticalScrollCount));
+
+    % Set new zoom limits: Min = 200px (1:1), Max = 1000px (5x zoom)
+    % data.zoom_size = max(200, min(1000, data.zoom_size + zoom_change * event.VerticalScrollCount));
+
 
     % Update zoom level bar text (flipped scale)
     set(data.zoom_bar, 'String', sprintf('Zoom Level: %d', data.zoom_size)); 
