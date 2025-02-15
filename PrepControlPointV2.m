@@ -106,7 +106,7 @@ elseif(exist(fullfile(UserPrefs.OutputFolder,UserPrefs.OutputFolderName),'file')
 end
 clear cancelled DefaultOpsFile
 
-% Pick Camera from database
+%% Pick Camera from database
 [searchKeyoption,rowIDX]=PickCamFromDatabase(UserPrefs.CameraDB);
 
 camStruct=importCameraData(UserPrefs.CameraDB, searchKeyoption); %WIP use rowIDX to verify and date confusion about the selected camera!
