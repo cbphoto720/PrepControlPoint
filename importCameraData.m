@@ -1,5 +1,6 @@
 function camStruct = importCameraData(Path_to_SIO_CamDatabase, searchKey)
-%{
+% **DISCONTINUED** Please see readSIOCamDatabase()
+%{ 
 Inputs:
     - Path_to_SIO_CamDatabase  =    [path] The fullfile location of:
                                     "SIO_CamDatabase.txt"

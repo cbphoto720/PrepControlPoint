@@ -1,5 +1,5 @@
 function imgcopiersaver(inputFolder, outputFolder, numCopies, camSN)
-    % PROCESS_TIF_IMAGES Processes TIFF images by copying and renaming them.
+    % **DISCONTINUED** PROCESS_TIF_IMAGES Processes TIFF images by copying and renaming them.
     %
     % Args:
     %   inputFolder (string): Path to the folder containing subfolders with .tif images.
