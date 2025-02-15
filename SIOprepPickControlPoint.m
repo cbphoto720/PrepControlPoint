@@ -17,7 +17,7 @@ switch selection
         close(fig);
         error('User selected cancel.  Please save you variables before getting started.')
 end
-mfilename('fullpath')
+% mfilename('fullpath') 
 %%
 addpath(genpath("C:\Users\Carson\Documents\Git\SIOCameraRectification"));
 addpath("C:\Users\Carson\Documents\Git\cmcrameri\cmcrameri\cmaps") %Scientific color maps
@@ -285,3 +285,31 @@ filenames = {files.name};
 for fileIDX=1:length(filenames)
     interactive_zoom_display(files(fileIDX).name);
 end
+
+%% Import the iG8 file
+close all; clear all; clc
+fprintf('Thinking ... ')
+GPSpointTable=importGPSpoints('20250122_Seacliff_set-corrected.txt');
+fprintf('Done Importing!\n')
+%% Find the Average of some GPS points
+rows=[7,8,9];
+j=3;
+a=0; %preallocate avg
+for i=1:length(rows)
+    a=a+GPSpointTable(rows(i),j);
+end
+a=a./3;
+
+% Work out precision
+get_precision = @(x) find(mod(x, 10.^-(1:15)) == 0, 1, 'first');
+% Get precision for each row element
+decimal_places = arrayfun(get_precision, GPSpointTable{rows,j});
+max_precision = max(decimal_places); 
+round_a = round(a, max_precision); % Round 'a' to the detected max precision (sometimes the iG8a will round values)
+
+%Get headers
+headers = GPSpointTable.Properties.VariableNames;
+VariableName = headers{j};
+
+
+fprintf(['%s AVG: \t %f \n%s Rounded: %.',num2str(max_precision),'f\n'],VariableName,a{1,1}, VariableName,round_a{1,1})
