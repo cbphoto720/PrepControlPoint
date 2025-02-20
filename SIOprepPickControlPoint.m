@@ -22,7 +22,7 @@ end
 addpath(genpath("C:\Users\Carson\Documents\Git\SIOCameraRectification"));
 addpath("C:\Users\Carson\Documents\Git\cmcrameri\cmcrameri\cmaps") %Scientific color maps
 
-camSNdatabase=[21217396,22296748,22296760];
+% camSNdatabase=[21217396,22296748,22296760];
 
 %% Options
 maxPointsInSet=5; % The max number of ground control targets in a single frame (usually 5)
@@ -139,6 +139,15 @@ firstpointOrigin=generateLeviLLZ(GPSpoints, date, imgtime, outputfolderpath);
 % Copy images to the proper
 imgcopiersaver('\\sio-smb.ucsd.edu\CPG-Projects-Ceph\SeacliffCam\20250123_GCP\usable-imgs',...
     outputfolderpath, IMGsetIDX,cameraSerialNumber);
+
+
+
+
+
+
+%% Start of Scratch paper
+
+
 
 %% Generate Camera Params (levi software)
 
@@ -313,3 +322,8 @@ VariableName = headers{j};
 
 
 fprintf(['%s AVG: \t %f \n%s Rounded: %.',num2str(max_precision),'f\n'],VariableName,a{1,1}, VariableName,round_a{1,1})
+
+
+%% Matlab YAML
+
+TestreadYAML = yaml.loadFile("SIO_CamDatabaseYAML.yaml");

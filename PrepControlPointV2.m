@@ -53,6 +53,7 @@ Outputs{
 Credit to Levi Gorrell for PickControlPoint
 Credit to Crameri, F. (2018). Scientific colour maps (hawaiiS.txt)
 Credit to Kesh Ikuma for inputsdlg Enhance Input Dialog Box
+Credit to Martin Koch & Alec Hoyland for developing Matlab yaml
 
 Created by Carson Black on 20240212.
 %}
@@ -162,7 +163,7 @@ clear surveyName figurename
 % copies (camera-agnostic)  Should be saved in PCP_DefaultOptions.
 files = dir(fullfile(UserPrefs.UsableIMGsFolder,[filesep,'*.tif']));
 % for fileIDX=1:length(filenames)
-    interactive_zoom_display(files(1).name); %WIP pass in filenames and loop through
+    pickGCPsGUI(files(1).name); %WIP pass in filenames and loop through
 % end
 
 %%
@@ -180,11 +181,11 @@ files = dir(fullfile(UserPrefs.UsableIMGsFolder,[filesep,'*.tif']));
 function [searchKeyoption,rowIDX]=PickCamFromDatabase(path_to_SIO_CamDatabase)
     opts = detectImportOptions(path_to_SIO_CamDatabase, "Delimiter", "\t");
 
-    opts.SelectedVariableNames = ["CamSN","CamNickname","Date"];
+    opts.SelectedVariableNames = ["CamSN","CamNickname","DateofGCP"];
     opts.MissingRule="omitrow";
     CameraOptionsTable=readtable(path_to_SIO_CamDatabase,opts);
 
-    CameraOptionsTable.Checkbox=false(height(CameraOptionsTable),1)
+    CameraOptionsTable.Checkbox=false(height(CameraOptionsTable),1);
 
     Title = 'Pick camera profile from database';
     Options.Resize = 'on';
@@ -226,7 +227,7 @@ end
 
 %% Img copier GUI
 
-function interactive_zoom_display(imgfile,filenames)
+function pickGCPsGUI(imgfile,filenames)
     % Load image
     img = imread(imgfile);
 
