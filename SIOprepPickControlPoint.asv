@@ -330,6 +330,33 @@ TestreadYAML = yaml.loadFile("SIO_CamDatabaseYAML.yaml");
 
 %% Test write YAML
 
-Path_to_SIO_CamDatabase="SIO_CamDatabaseYAML.yaml";
 
-appendSIO_CamDatabase("Carson's Camera", 1234, 20250221, cameraparams, Path_to_SIO_CamDatabase)
+function mustBeCameraParameters(cameraparams)
+    mustBeA(cameraparams,"cameraParameters")
+end
+
+mustBeCameraParameters(ans)
+
+%%
+
+DBcellVector = yaml.loadFile("SIO_CamDatabaseYAML.yaml");
+
+% List of required fields
+requiredFields = ["CamSN", "CamNickname", "DateofGCP", "Northings", "Eastings", "Height", ...
+    "UTMzone", "ac", "c0U", "c0V", "fx", "fy", "d1", "d2", "d3", "t1", "t2", ...
+    "NU", "NV", "pitch", "roll", "azimuth", "originUTMnorthing", "originUTMeasting", "theta"];
+
+% Ensure all structs have the required fields
+for i = 1:numel(DBcellVector)
+    for field = requiredFields
+        if ~isfield(DBcellVector(i), field)
+            DBcellVector(i).(field) = NaN; % Assign default value
+        end
+    end
+end
+
+% Convert to table
+cameraTable = struct2table(DBcellVector);
+
+% Display table
+% disp(cameraTable);
