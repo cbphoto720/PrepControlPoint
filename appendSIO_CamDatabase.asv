@@ -33,18 +33,26 @@ function appendSIO_CamDatabase(CamNickname, CamSN, DateofGCP, cameraparams, Path
         'ImageSize_V', num2str(cameraparams.Intrinsics.ImageSize(2)) ...
     );
 
+    yamlStruct.Position= struct(...
+        'Northings', num2str(camera)
+        )
+
     % Create YAML text
     appendtxt=yaml.dump(yamlStruct, "block");
+    appendtxt=char(appendtxt);
+    appendtxt=regexprep(appendtxt,"\r?\n","\r\t");
+    appendtxt=appendtxt(1:end-2);  % Remove the last '\r\t'
+    appendtxt=sprintf("\n- ")+appendtxt;
 
     % % Create file if is doesn't exist             ---->       The SIO_CamDatabase should already exist if we are appending to it!
     % if ~exist(Path_to_SIO_CamDatabase,"file")
     %     mkdir(Path_to_SIO_CamDatabase);
     % end
     fileID=fopen(Path_to_SIO_CamDatabase,"a");
-    fprintf(fileID,"%s",strcat("- ",appendtxt));
+    fprintf(fileID,"%s",appendtxt);
     fclose(fileID);
     
-    disp(['YAML file saved: \n', appendtxt]);
+    fprintf('YAML file saved: \n%s\n', appendtxt);
 
 
 end

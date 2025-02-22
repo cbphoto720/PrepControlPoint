@@ -33,6 +33,10 @@ function appendSIO_CamDatabase(CamNickname, CamSN, DateofGCP, cameraparams, Path
         'ImageSize_V', num2str(cameraparams.Intrinsics.ImageSize(2)) ...
     );
 
+    %WIP Add camera Position
+    %WIP Add camera Local Coordinate system
+
+
     % Create YAML text
     appendtxt=yaml.dump(yamlStruct, "block");
     appendtxt=char(appendtxt);
