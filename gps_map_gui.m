@@ -473,7 +473,7 @@ function GCPapp = gps_map_gui(UserPrefs, GPSpoints, IndividualCamDB)
 
     function ExportCallback();
         outputmask=(GPSpoints.ImageU~=0);
-        outtable=[GPSpoints.Northings(outputmask),GPSpoints.Eastings(outputmask),GPSpoints.H(outputmask),...
+        outtable=[GPSpoints.Northings(outputmask),GPSpoints.Eastings(outputmask),GPSpoints.Elevation(outputmask),...
             GPSpoints.ImageU(outputmask),GPSpoints.ImageV(outputmask)];
 
         warning('This button is OLD please ignore')
@@ -555,7 +555,7 @@ function GCPapp = gps_map_gui(UserPrefs, GPSpoints, IndividualCamDB)
             ComputedCamDB.(UserPrefs.DateofICP).CamPose.Azimuth=    betaOUT(6);
     
             % Generate GCP table
-            outtable=[GPSpoints.Northings(outputmask),GPSpoints.Eastings(outputmask),GPSpoints.H(outputmask),...
+            outtable=[GPSpoints.Northings(outputmask),GPSpoints.Eastings(outputmask),GPSpoints.Elevation(outputmask),...
                 GPSpoints.ImageU(outputmask),GPSpoints.ImageV(outputmask)];
     
             for i=1:length(outtable)
