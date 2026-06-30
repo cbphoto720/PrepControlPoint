@@ -116,24 +116,60 @@ IndividualCamDB=readCPG_CamDatabase("SiteId", UserPrefs.SiteID, "CamSN",UserPref
 % Choose which intrinsics to use
 if UserPrefs.UsePrevCalib
     % Use the database to grab the previous Camera Calibration
-    IndividualCamDB_ST=readCPG_CamDatabase("CamSN",UserPrefs.CamSN,Format="SearchTable");
-    validDateIDX = find(IndividualCamDB_ST.Date{1} <= datetime(UserPrefs.SurveyDate,"InputFormat",'yyyyMMdd','TimeZone','UTC'),1,'last'); % Choose closest date without going over
-
-    UserPrefs.DateofICP=string(datetime(IndividualCamDB_ST.Date{1}(validDateIDX)),'yyyyMMdd'); %Temporarily set as Date yyyyMMdd
-
-    pattern = strcat('D', UserPrefs.DateofICP, 'T');
-    list=fieldnames(IndividualCamDB);
-    matchIdx = contains(list, pattern);
-    if any(matchIdx)
-        % Extract the full string (e.g., 'D20250122T220000Z')
-        UserPrefs.DateofICP = list{matchIdx}; % change to ISO 8601 naming
-    else
-        error('No matching date found in the database list.');
+    % Use the database to grab the previous Camera Calibration
+    IndividualCamDB_ST = readCPG_CamDatabase( ...
+        "CamSN", UserPrefs.CamSN, ...
+        Format="SearchTable");
+    
+    % Convert survey date to datetime
+    surveyDate = datetime(UserPrefs.SurveyDate, ...
+        'InputFormat','yyyyMMdd', ...
+        'TimeZone','UTC');
+    
+    % Search all CollectionDate fields
+    dbDates = IndividualCamDB_ST.Date{1};
+    dbDates.Format = "yyyyMMdd'T'HHmmss'Z'";
+    
+    matchedField = "";
+    
+    for k = 1:numel(dbDates)
+        fieldName = "D" + string(dbDates(k));
+    
+        % Skip if field somehow doesn't exist
+        if ~isfield(IndividualCamDB, fieldName)
+            continue
+        end
+    
+        % Read CollectionDate
+        collectionStr = IndividualCamDB.(fieldName).CollectionDate;
+    
+        % Remove surrounding quotes if present
+        collectionStr = collectionStr{1}(2:end-1);
+    
+        collectionDate = datetime( ...
+            collectionStr, ...
+            'InputFormat',"yyyyMMdd'T'HHmmss", ...
+            'TimeZone','UTC');
+    
+        % Compare only the calendar date
+        if dateshift(collectionDate,'start','day') == surveyDate
+            matchedField = fieldName;
+            break
+        end
     end
-    clear pattern list matchIdx\
+    
+    % Error if no exact match was found
+    if matchedField == ""
+        error( ...
+            'No camera calibration found for survey date %s (Camera SN %s).', ...
+            UserPrefs.SurveyDate, ...
+            UserPrefs.CamSN);
+    end
+    
+    UserPrefs.DateofICP = matchedField;
 
     PrevCamEntry=readCPG_CamDatabase(CamSN=UserPrefs.CamSN,...
-        Date=datetime(UserPrefs.DateofICP(2:end-1), 'InputFormat', 'yyyyMMdd''T''HHmmss','TimeZone','UTC'));
+        Date=datetime(UserPrefs.DateofICP{1}(2:end-1), 'InputFormat', 'yyyyMMdd''T''HHmmss','TimeZone','UTC'));
 
     cameracalib=PrevCamEntry.(UserPrefs.DateofICP);
     UserPrefs.DateofICP=strcat('D',UserPrefs.SurveyDate,'T070000Z');
