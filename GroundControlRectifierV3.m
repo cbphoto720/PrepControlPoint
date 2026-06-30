@@ -172,7 +172,6 @@ if UserPrefs.UsePrevCalib
         Date=datetime(UserPrefs.DateofICP{1}(2:end-1), 'InputFormat', 'yyyyMMdd''T''HHmmss','TimeZone','UTC'));
 
     cameracalib=PrevCamEntry.(UserPrefs.DateofICP);
-    UserPrefs.DateofICP=strcat('D',UserPrefs.SurveyDate,'T070000Z');
 
     NewCamEntry=generate_CameraDBstruct(...
         SiteID=UserPrefs.SiteID,...
