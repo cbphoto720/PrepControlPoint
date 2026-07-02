@@ -95,6 +95,13 @@ if GPSshape(2)==23 % Check GPS format
 end
 clear GPSshape
 
+% Convert string input to double
+UserPrefs.CamSN=str2double(UserPrefs.CamSN);
+
+[path_to_CPG_CamDatabase_folder, ~, ~] = fileparts(UserPrefs.CameraDB);
+addpath(genpath(path_to_CPG_CamDatabase_folder));
+IndividualCamDB=readCPG_CamDatabase("SiteId", UserPrefs.SiteID, "CamSN",UserPrefs.CamSN);
+
 % Automatically select survey date from GPS file
 if UserPrefs.PullDateFromGPS
     alldays = dateshift(GPSpoints.Time, 'start', 'day');
@@ -104,18 +111,7 @@ if UserPrefs.PullDateFromGPS
     else
         error('GPS file contains points from multiple days!  Please manually choose a survey date')
     end
-end
 
-% Convert string input to double
-UserPrefs.CamSN=str2double(UserPrefs.CamSN);
-
-[path_to_CPG_CamDatabase_folder, ~, ~] = fileparts(UserPrefs.CameraDB);
-addpath(genpath(path_to_CPG_CamDatabase_folder));
-IndividualCamDB=readCPG_CamDatabase("SiteId", UserPrefs.SiteID, "CamSN",UserPrefs.CamSN);
-
-% Choose which intrinsics to use
-if UserPrefs.UsePrevCalib
-    % Use the database to grab the previous Camera Calibration
     % Use the database to grab the previous Camera Calibration
     IndividualCamDB_ST = readCPG_CamDatabase( ...
         "CamSN", UserPrefs.CamSN, ...
@@ -167,7 +163,12 @@ if UserPrefs.UsePrevCalib
     end
     
     UserPrefs.DateofICP = matchedField;
+else
+    UserPrefs.DateofICP="D" + string(UserPrefs.SurveyDate) + 'T070000Z'; % Generic market for midnight UTC time of survey date
+end
 
+% Choose which intrinsics to use
+if UserPrefs.UsePrevCalib
     PrevCamEntry=readCPG_CamDatabase(CamSN=UserPrefs.CamSN,...
         Date=datetime(UserPrefs.DateofICP{1}(2:end-1), 'InputFormat', 'yyyyMMdd''T''HHmmss','TimeZone','UTC'));
 
